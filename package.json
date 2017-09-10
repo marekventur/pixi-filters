@@ -1,0 +1,25 @@
+{
+  "private": true,
+  "scripts": {
+    "prebootstrap": "npm install",
+    "bootstrap": "lerna bootstrap --hoist",
+    "clean": "lerna clean",
+    "predeploy": "npm run docs",
+    "test": "npm run build",
+    "deploy": "node scripts/deploy",
+    "docs": "jsdoc -c scripts/jsdoc.conf.json -R README.md",
+    "lint": "eslint scripts **/src **/rollup.config.js --fix",
+    "examples": "open http://localhost:8080/examples/index.html && http-server . -s -c-1",
+    "prebuild": "npm run lint",
+    "build": "lerna run build",
+    "lerna": "lerna"
+  },
+  "devDependencies": {
+    "eslint": "^4.6.1",
+    "gh-pages": "^0.11.0",
+    "http-server": "^0.9.0",
+    "jaguarjs-jsdoc": "^1.0.0",
+    "jsdoc": "^3.4.0",
+    "lerna": "^2.0.0"
+  }
+}

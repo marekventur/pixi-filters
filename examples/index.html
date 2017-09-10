@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <title>PixiJS Filters Demo</title>
+        <meta name='viewport' content='width=device-width, initial-scale=1.0'>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/dat-gui/0.6.5/dat.gui.min.js"></script>
+        <script src="https://pixijs.download/dev/pixi.min.js"></script>
+        <script src="../filters/led/lib/pixi-filter-led.js"></script>
+        <style>
+
+            body {
+                margin:0;
+                padding:0;
+                font-family: Helvetica, sans-serif;
+                background:#333;
+            }
+            #container {
+                top:0;
+                left:0;
+                width:100%;
+                height:100%;
+                position:absolute;
+            }
+            #stage {
+                width:100%;
+                height:100%;
+                position:absolute;
+                display:block;
+                z-index: 0;
+            }
+            #logo {
+                position: absolute;
+                z-index:1;
+                width:245px;
+                height:69px;
+                top:0;
+                right: 15px;
+                background:#000;
+                padding:10px 0;
+            }
+            .dg.ac {
+                top:89px !important;
+            }
+            #logo img {
+                display: block;
+            }
+
+        </style>
+    </head>
+    <body>
+        <div id="container">
+            <canvas id="stage" width="300" height="300"></canvas>
+            <a id="logo" href="http://www.pixijs.com"><img src="images/pixijs-v4-logo.png"></a>
+        </div>
+        <script>
+            (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+            (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+            })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+            ga('create', 'UA-103772589-3', 'auto');
+            ga('send', 'pageview');
+            function trackEvent(enabled) {
+                ga('send', 'event',
+                    this.name.replace(' (pixi.js)', ''),
+                    enabled ? 'enabled' : 'disabled'
+                );
+            }
+        </script>
+        <script>
+
+            var gui = new dat.GUI();
+            gui.useLocalStorage = false;
+
+            var $ = document.querySelector.bind(document);
+            var view = $('#stage');
+            var container = $('#container');
+            var stageWidth = container.offsetWidth;
+            var stageHeight = container.offsetHeight;
+
+            // Create the application
+            var app = new PIXI.Application({
+                view: view,
+                width: stageWidth,
+                height: stageHeight
+            });
+
+            // Preload the assets needed
+            app.stop();
+            app.loader
+                .add('background', 'images/displacement_BG.jpg')
+                .add('overlay', 'images/overlay.png')
+                .add('map', 'images/displacement_map.png')
+                .add('fish1', 'images/displacement_fish1.png')
+                .add('fish2', 'images/displacement_fish2.png')
+                .add('fish3', 'images/displacement_fish3.png')
+                .add('fish4', 'images/displacement_fish4.png')
+                .load(function(loader, resources) {
+                    init(resources);
+                    app.start();
+                });
+
+            function init(resources) {
+                var padding = 100;
+                var bounds = new PIXI.Rectangle(
+                    -padding,
+                    -padding,
+                    stageWidth + padding * 2,
+                    stageHeight + padding * 2
+                );
+
+                // Setup the container
+                var pond = new PIXI.Container();
+                app.stage.addChild(pond);
+
+                // Collection of fish sprites
+                var fishes = [];
+
+                // Setup the background image
+                var bg = new PIXI.Sprite(resources.background.texture);
+
+                // Setup the tiling sprite
+                var overlay = new PIXI.extras.TilingSprite(
+                    resources.overlay.texture,
+                    stageWidth,
+                    stageHeight
+                );
+
+                // Add the background
+                pond.addChild(bg);
+
+                var folder;
+
+                // Create wave displacement
+                resources.map.texture.baseTexture.wrapMode = PIXI.WRAP_MODES.REPEAT;
+                var displacementSprite = new PIXI.Sprite(resources.map.texture);
+                var displacementFilter = new PIXI.filters.DisplacementFilter(
+                    displacementSprite,
+                    stageWidth,
+                    stageHeight
+                );
+                displacementFilter.scale.x = 50;
+                displacementFilter.scale.y = 50;
+                folder = gui.addFolder('DisplacementFilter (pixi.js)');
+                folder.add(displacementFilter, 'enabled').onChange(trackEvent.bind(folder));
+                folder.add(displacementFilter.scale, 'x', 1, 200).name('scale.x');
+                folder.add(displacementFilter.scale, 'y', 1, 200).name('scale.y');
+
+                // Setup gui for displacement
+                var blurFilter = new PIXI.filters.BlurFilter();
+                blurFilter.enabled = false;
+                folder = gui.addFolder('BlurFilter (pixi.js)');
+                folder.add(blurFilter, 'enabled').onChange(trackEvent.bind(folder));
+                folder.add(blurFilter, 'blur', 0, 100);
+                folder.add(blurFilter, 'quality', 1, 10);
+
+                // Setup gui for displacement
+                var noiseFilter = new PIXI.filters.NoiseFilter();
+                noiseFilter.enabled = false;
+                folder = gui.addFolder('NoiseFilter (pixi.js)');
+                folder.add(noiseFilter, 'enabled').onChange(trackEvent.bind(folder));
+                folder.add(noiseFilter, 'noise', 0, 1);
+                folder.add(noiseFilter, 'seed', 0.01, 0.99);
+
+                // Setup gui for displacement
+                var colorFilter = new PIXI.filters.ColorMatrixFilter();
+                colorFilter.enabled = false;
+                folder = gui.addFolder('ColorMatrixFilter (pixi.js)');
+                folder.add(colorFilter, 'enabled').onChange(trackEvent.bind(folder));
+                folder.add(colorFilter, 'reset');
+                folder.add(colorFilter, 'sepia');
+                folder.add(colorFilter, 'negative');
+                folder.add({kodachrome: colorFilter.kodachrome.bind(colorFilter, true)}, 'kodachrome');
+                folder.add({lsd: colorFilter.lsd.bind(colorFilter, true)}, 'lsd');
+                folder.add(colorFilter, 'polaroid');
+                folder.add(colorFilter, 'desaturate');
+                folder.add({contrast: colorFilter.contrast.bind(colorFilter, 1)}, 'contrast');
+                folder.add({greyscale: colorFilter.greyscale.bind(colorFilter, 1)}, 'greyscale');
+                folder.add({predator: colorFilter.predator.bind(colorFilter, 1)}, 'predator');
+                folder.add({saturate: colorFilter.saturate.bind(colorFilter, 1)}, 'saturate');
+
+                // Setup gui for LED
+                var ledFilter = new PIXI.filters.LedFilter();
+                ledFilter.enabled = false;
+                folder = gui.addFolder('LED Filter');
+                folder.add(ledFilter, 'enabled').onChange(trackEvent.bind(folder));
+                folder.add(ledFilter, 'size', 1, 100);
+                folder.add(ledFilter, 'fill', 0.01, 2.0);
+                folder.add(ledFilter, 'intensity', 0.0, 1.0);
+                folder.add(ledFilter, 'backgroundAlpha', 0.0, 1.0);
+                folder.addColor(ledFilter, 'backgroundColor');
+
+                // Create and add the fish
+                for (var i = 0; i < 20; i++) {
+                    var id = 'fish' + ((i % 4) + 1);
+                    var fish = new PIXI.Sprite(resources[id].texture);
+                    fish.anchor.set(0.5);
+
+                    pond.addChild(fish);
+
+                    fish.direction = Math.random() * Math.PI * 2;
+                    fish.speed = 2 + Math.random() * 2;
+                    fish.turnSpeed = Math.random() - 0.8;
+
+                    fish.x = Math.random() * bounds.width;
+                    fish.y = Math.random() * bounds.height;
+
+                    fish.scale.set(0.8 + Math.random() * 0.3);
+                    fishes.push(fish);
+                }
+
+                // Add the overlay
+                pond.addChild(overlay);
+
+
+                // Apply filters
+                var filterAreaPadding = 4;
+                var filterArea = new PIXI.Rectangle();
+                pond.filterArea = filterArea;
+                pond.filters = [
+                    displacementFilter,
+                    blurFilter,
+                    noiseFilter,
+                    colorFilter,
+                    ledFilter
+                ];
+
+                window.addEventListener('resize', resize);
+
+                function resize() {
+                    var width = container.offsetWidth;
+                    var height = container.offsetHeight;
+
+                    bg.width = width;
+                    bg.height = height;
+
+                    overlay.width = width;
+                    overlay.height = height;
+
+                    bounds.x = -padding;
+                    bounds.y = -padding;
+                    bounds.width = width + padding * 2;
+                    bounds.height = height + padding * 2;
+
+                    filterArea.x = filterAreaPadding;
+                    filterArea.y = filterAreaPadding;
+                    filterArea.width = width - filterAreaPadding * 2;
+                    filterArea.height = height - filterAreaPadding * 2;
+
+                    displacementSprite.width = width;
+                    displacementSprite.height = height;
+
+                    app.renderer.resize(
+                        width,
+                        height
+                    );
+                }
+
+                resize();
+
+                var count = 0;
+
+                app.ticker.add(function(delta) {
+                    count += 0.1 * delta;
+
+                    // Animate the overlay
+                    overlay.tilePosition.x = count * -10;
+                    overlay.tilePosition.y = count * -10;
+
+                    displacementFilter.x = count * 10;
+                    displacementFilter.y = count * 10;
+
+                    for (var i = 0; i < fishes.length; i++) {
+                        var fish = fishes[i];
+
+                        fish.direction += fish.turnSpeed * 0.01;
+
+                        fish.x += Math.sin(fish.direction) * fish.speed;
+                        fish.y += Math.cos(fish.direction) * fish.speed;
+
+                        fish.rotation = -fish.direction - Math.PI/2;
+
+                        if (fish.x < bounds.x) {
+                            fish.x += bounds.width;
+                        }
+                        if (fish.x > bounds.x + bounds.width) {
+                            fish.x -= bounds.width
+                        }
+                        if (fish.y < bounds.y) {
+                            fish.y += bounds.height;
+                        }
+                        if (fish.y > bounds.y + bounds.height) {
+                            fish.y -= bounds.height
+                        }
+                    }
+                });
+            }
+
+        </script>
+    </body>
+</html>
