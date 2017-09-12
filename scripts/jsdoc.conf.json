@@ -4,7 +4,8 @@
     },
     "source": {
         "include": [
-            "filters/led/src/"
+            "filters/led/src/",
+            "filters/led/crt-lottes/"
         ],
         "includePattern": ".+\\.js(doc)?$",
         "excludePattern": "(^|\\/|\\\\)_"
