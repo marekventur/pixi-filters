@@ -109,7 +109,7 @@
     </ul>
 </div>
     <div class="main">
-        <h1 class="page-title" data-filename="LedFilter.html">Class: LedFilter</h1>
+        <h1 class="page-title" data-filename="CrtLottesFilter.html">Class: CrtLottesFilter</h1>
         
 
 
@@ -118,10 +118,11 @@
     
 <header>
     <h2>
-    LedFilter
+    CrtLottesFilter
     </h2>
     
-        <div class="class-description"><p>This filter applies a led effect, making the container look like it's some sort of public transport display</p></div>
+        <div class="class-description"><p>This filter applies a crt effect. Based on https://www.shadertoy.com/view/XsjSzR</p>
+<p>Original Author: Timothy Lottes</p></div>
     
 </header>  
 
@@ -133,14 +134,14 @@
         
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="LedFilter">
+        <h4 class="name" id="CrtLottesFilter">
             
-            new LedFilter<span class="signature">(<span class="optional">config</span>)</span>
+            new CrtLottesFilter<span class="signature">(<span class="optional">config</span>)</span>
         </h4>
     
         
         <div class="tag-source">
-            <a href="led_src_LedFilter.js.html">led/src/LedFilter.js</a>, <a href="led_src_LedFilter.js.html#line18">line 18</a>
+            <a href="crt-lottes_src_CrtLottesFilter.js.html">crt-lottes/src/CrtLottesFilter.js</a>, <a href="crt-lottes_src_CrtLottesFilter.js.html#line19">line 19</a>
         </div>
         
     </div>
@@ -241,7 +242,7 @@
             
                 <td class="default">
                 
-                    10
+                    3
                 
                 </td>
             
@@ -255,14 +256,14 @@
                         
                     
                 
-                <p>Width/height of the size of each segment</p></td>
+                <p>Size of simulated pixel. 8 = soft; 16 = medium</p></td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>fill</code></td>
+                <td class="name"><code>hardScan</code></td>
             
             
             <td class="type">
@@ -277,7 +278,7 @@
             
                 <td class="default">
                 
-                    0.9
+                    8
                 
                 </td>
             
@@ -291,14 +292,14 @@
                         
                     
                 
-                <p>How much of every square is filled with the LED. 1.0 means LEDs are touching</p></td>
+                <p>Hardness of scanline. 2 = soft; 4 = hard</p></td>
         </tr>
 	
 	
 	
         <tr>
             
-                <td class="name"><code>backgroundColor</code></td>
+                <td class="name"><code>hardPixel</code></td>
             
             
             <td class="type">
@@ -313,7 +314,7 @@
             
                 <td class="default">
                 
-                    0x000000
+                    3
                 
                 </td>
             
@@ -327,43 +328,7 @@
                         
                     
                 
-                <p>Background color</p></td>
-        </tr>
-	
-	
-	
-        <tr>
-            
-                <td class="name"><code>backgroundAlpha</code></td>
-            
-            
-            <td class="type">
-            
-                
-<span class="param-type">number</span>
-
-
-            
-            </td>
-            
-            
-                <td class="default">
-                
-                    1
-                
-                </td>
-            
-            
-            <td class="description last">
-                
-                    
-                        <span class="optional">optional</span>
-                    
-                    
-                        
-                    
-                
-                <p>Background alpha</p></td>
+                <p>Hardness of pixels in scanline</p></td>
         </tr>
 	
 	
@@ -478,7 +443,7 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="backgroundAlpha">backgroundAlpha<span class="type-signature type number">number</span> </h4>
+        <h4 class="name" id="hardPixel">hardPixel<span class="type-signature type number">number</span> </h4>
     </div>
     
     
@@ -486,7 +451,7 @@
 <dd>
     
     <div class="description">
-        <p>Background alpha</p>
+        <p>Hardness of pixels in scanline. 2 = soft; 4 = hard</p>
     </div>
     
     
@@ -508,7 +473,7 @@
     
     
     <dt class="tag-default">Default Value:</dt>
-    <dd class="tag-default"><ul class="dummy"><li>1</li></ul></dd>
+    <dd class="tag-default"><ul class="dummy"><li>3</li></ul></dd>
     
     
     
@@ -526,7 +491,7 @@
             
 <dt>
     <div class="nameContainer">
-        <h4 class="name" id="backgroundColor">backgroundColor<span class="type-signature type number">number</span> </h4>
+        <h4 class="name" id="hardScan">hardScan<span class="type-signature type number">number</span> </h4>
     </div>
     
     
@@ -534,7 +499,7 @@
 <dd>
     
     <div class="description">
-        <p>Background color</p>
+        <p>Hardness of scanline. 8 = soft; 16 = medium</p>
     </div>
     
     
@@ -556,55 +521,7 @@
     
     
     <dt class="tag-default">Default Value:</dt>
-    <dd class="tag-default"><ul class="dummy"><li>0x000000</li></ul></dd>
-    
-    
-    
-    
-    
-    
-    
-</dl>
-
-    
-    
-</dd>
-
-        
-            
-<dt>
-    <div class="nameContainer">
-        <h4 class="name" id="fill">fill<span class="type-signature type number">number</span> </h4>
-    </div>
-    
-    
-</dt>
-<dd>
-    
-    <div class="description">
-        <p>How much of every square is filled with the LED. 1.0 means LEDs are touching</p>
-    </div>
-    
-    
-    
-<dl class="details">
-    
-        
-    
-    
-    
-
-    
-    
-    
-    
-    
-    
-    
-    
-    
-    <dt class="tag-default">Default Value:</dt>
-    <dd class="tag-default"><ul class="dummy"><li>0.9</li></ul></dd>
+    <dd class="tag-default"><ul class="dummy"><li>8</li></ul></dd>
     
     
     
@@ -678,7 +595,7 @@
 <dd>
     
     <div class="description">
-        <p>Size of each segment</p>
+        <p>Size of simulated pixel</p>
     </div>
     
     
@@ -700,7 +617,7 @@
     
     
     <dt class="tag-default">Default Value:</dt>
-    <dd class="tag-default"><ul class="dummy"><li>10</li></ul></dd>
+    <dd class="tag-default"><ul class="dummy"><li>3</li></ul></dd>
     
     
     

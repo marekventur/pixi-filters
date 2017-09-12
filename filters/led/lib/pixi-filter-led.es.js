@@ -1,6 +1,6 @@
 /*!
  * pixi-filter-led - v1.0.0
- * Compiled Sun, 10 Sep 2017 20:33:10 UTC
+ * Compiled Tue, 12 Sep 2017 17:02:15 UTC
  *
  * Licensed under the MIT License.
  * http://www.opensource.org/licenses/mit-license
