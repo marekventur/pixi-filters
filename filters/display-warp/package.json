@@ -1,0 +1,38 @@
+{
+  "name": "pixi-filter-display-warp",
+  "version": "1.0.0",
+  "main": "lib/filter-display-warp.min.js",
+  "description": "Emulates an Display warp based on https://www.shadertoy.com/view/XsjSzR",
+  "author": "Timothy Lottes",
+  "contributors": [
+    "Marek Ventur <marekventur@gmail.com>"
+  ],
+  "module": "lib/filter-display-warp.es.min.js",
+  "homepage": "http://pixijs.com/",
+  "bugs": "https://github.com/marekventur/pixi-filters/issues",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/marekventur/pixi-filters.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "build:umd": "rollup -c -f umd && rollup -cp -f umd",
+    "build:es": "rollup -c && rollup -cp",
+    "build": "npm run build:umd && npm run build:es",
+    "dev": "rollup  -c -w -f umd"
+  },
+  "files": [
+    "lib"
+  ],
+  "peerDependencies": {
+    "pixi.js": "^4.0.0"
+  },
+  "devDependencies": {
+    "@tools/build": "^2.0.1",
+    "@tools/fragments": "^2.0.0",
+    "rollup": "^0.45.2"
+  }
+}

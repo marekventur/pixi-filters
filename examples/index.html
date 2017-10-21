@@ -9,6 +9,7 @@
         <script src="https://pixijs.download/dev/pixi.min.js"></script>
         <script src="../filters/led/lib/pixi-filter-led.js"></script>
         <script src="../filters/crt-lottes/lib/pixi-filter-crt-lottes.js"></script>
+        <script src="../filters/display-warp/lib/pixi-filter-display-warp.js"></script>
         <style>
 
             body {
@@ -176,13 +177,23 @@
 
                 // Setup gui for CRT Lottes
                 var crtLottes = new PIXI.filters.CrtLottesFilter();
-                crtLottes.enabled = true;
+                crtLottes.enabled = false;
                 folder = gui.addFolder('CRT Lottes Filter');
                 folder.add(crtLottes, 'enabled');
                 folder.add(crtLottes, 'intensity', 0.0, 1.0);
                 folder.add(crtLottes, 'size', 1.0, 10.0);
                 folder.add(crtLottes, 'hardScan', 0.0, 20.0);
                 folder.add(crtLottes, 'hardPixel', 0.0, 30.0);
+
+                // Setup gui for Display Warp
+                var displayWarp = new PIXI.filters.DisplayWarpFilter();
+                displayWarp.enabled = true;
+                folder = gui.addFolder('Display Warp');
+                folder.add(displayWarp, 'enabled');
+                folder.add(displayWarp.warp, 'x', 0, 1).name('warp.x');
+                folder.add(displayWarp.warp, 'y', 0, 1).name('warp.y');
+                folder.add(displayWarp, 'maskDark', 0.0, 2.0);
+                folder.add(displayWarp, 'maskLight', 0.0, 2.0);
 
                 // Create and add the fish
                 for (var i = 0; i < 20; i++) {
@@ -217,7 +228,8 @@
                     noiseFilter,
                     colorFilter,
                     ledFilter,
-                    crtLottes
+                    crtLottes,
+                    displayWarp
                 ];
 
                 window.addEventListener('resize', resize);
